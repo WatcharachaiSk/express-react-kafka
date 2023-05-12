@@ -1,34 +1,28 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const controllers = require('./src/controller/kafka.controller');
+const KafkaConfig = require('./src/config/config.kafka');
 const dotenv = require('dotenv');
-const kafka = require("kafka-node");
-const { Kafka, logLevel } = require('kafkajs')
+const { Kafka } = require('kafkajs');
 
-const app = express();
-const server = require("http").createServer(app);
-const io = require("socket.io")(server);
 
 dotenv.config();
 const port = process.env.PORT;
 
-// Kafka setup
-const kafkaClient = new kafka.KafkaClient({
-  kafkaHost: "localhost:9092",
-});
-const consumer = new kafka.Consumer(kafkaClient, [{ topic: "test" }]);
+const app = express();
+const jsonParser = bodyParser.json();
 
-// WebSocket setup
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  consumer.on("message", (message) => {
-    socket.emit("data", message.value);
-  });
-});
+app.post('/api/send', jsonParser, controllers.sendMessageToKafka);
 
 
 
-
+// // consume Test
+// const kafkaConfig = new KafkaConfig();
+// kafkaConfig.consumer('my-topic', (value) => {
+//   console.log(value);
+// });
 
 // Start server
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
