@@ -3,52 +3,58 @@ import './App.css';
 import io from 'socket.io-client';
 // import WebSocket from 'ws';
 
-const loc: any = 'http://localhost:3001';
-const socket = io.connect("http://localhost:3001");
-
 function App() {
-  //Room State
-  const [room, setRoom] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [messageNew, setMessageNew] = useState('');
 
-  // Messages States
-  const [message, setMessage] = useState('');
-  const [messageReceived, setMessageReceived] = useState('');
+  console.log('messages is ', messages);
+  useEffect(() => {
+    const socket = io('http://localhost:3000');
 
-  const joinRoom = () => {
-    if (room !== '') {
-      socket.emit('join_room', room);
-    }
-  };
+    socket.on('message', (data: string) => {
+      console.log('Received message:', data);
+      console.log('data is ', data);
+
+      setMessages((prevMessages: any) => [...prevMessages, data]);
+    });
+
+    // Clean up the socket connection
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const sendMessage = () => {
-    socket.emit('send_message', { message, room });
+    const socket = io('http://localhost:3000'); // Replace with your Socket.IO server URL
+    socket.emit('message', messageNew);
+    setMessageNew(''); // Clear the input field after sending the message
   };
 
-  useEffect(() => {
-    socket.on('receive_message', (data: any) => {
-      setMessageReceived(data.message);
-    });
-  }, [socket]);
-
   return (
-    <div className="App">
-    <input
-      placeholder="Room Number..."
-      onChange={(event) => {
-        setRoom(event.target.value);
-      }}
-    />
-    <button onClick={joinRoom}> Join Room</button>
-    <input
-      placeholder="Message..."
-      onChange={(event) => {
-        setMessage(event.target.value);
-      }}
-    />
-    <button onClick={sendMessage}> Send Message</button>
-    <h1> Message:</h1>
-    {messageReceived}
-  </div>
+    <div className='App'>
+      <div>
+        {/* Render your component content */}
+        {/* <div>
+          <input
+            type='text'
+            value={messageNew}
+            onChange={(e) => setMessageNew(e.target.value)}
+          />
+          <button onClick={sendMessage}>Send Message</button>
+        </div> */}
+        <div>
+          <h1>Real-time Messages</h1>
+          <ul>
+            {messages.map((item: any, index) => (
+              <li style={{fontSize:20}} key={index}>
+                Key is : {item.key} lat:Is: {item.lat} lat:Is {item.long}{' '}
+                value:Is {item.value}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
 
