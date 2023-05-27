@@ -1,11 +1,13 @@
 // import React from "react";
 
-import HeaderContent from "../../components/header/HeaderContent";
+import PointToPoint from '../../components/animations/PointToPoint';
+import HeaderContent from '../../components/header/HeaderContent';
 
 function Dashboard() {
   return (
     <>
       <HeaderContent title='Dashboard' />
+      <PointToPoint width={20} height={20} />
     </>
   );
 }
