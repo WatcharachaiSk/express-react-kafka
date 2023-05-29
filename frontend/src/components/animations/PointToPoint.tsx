@@ -1,85 +1,37 @@
-import { useState } from 'react';
-import { useSpring, animated } from '@react-spring/web';
+// import { useEffect, useState } from 'react';
+// import { useSpring, animated } from '@react-spring/web';
 import { PropsPointType } from './type/props.point.type';
+import './CustomCss.css';
+import styled from 'styled-components';
 
 function PointToPoint(props: PropsPointType) {
-  const [inPoint, setInPoint] = useState<number>(1);
-  const props1 = useSpring({
-    from: { opacity: 1 },
-    config: { duration: 800 },
-  });
-  const props2 = useSpring({
-    opacity: 0.2,
-    from: { opacity: 0.8 },
-    config: { duration: 5000 },
-    loop: inPoint == 1 ? true : false,
-  });
-  const props3 = useSpring({
-    opacity: 0.2,
-    from: { opacity: 0.8 },
-    config: { duration: 2000 },
-    loop: inPoint == 2 ? true : false,
-  });
-  const props4 = useSpring({
-    opacity: 0.2,
-    from: { opacity: 0.8 },
-    config: { duration: 1000 },
-    loop: inPoint == 3 ? true : false,
-  });
+  const CustomLoaderNormal = styled.div`
+    width: 24px;
+    height: 24px;
+    background: #000;
+    border-radius: 50%;
+    box-shadow: 30px 0 #000, 60px 0 #000, 90px 0 #000;
+    animation: d5 2s infinite linear normal;
+    @keyframes d5 {
+      0% {
+        box-shadow: 30px 0 #766df422, 60px 0 #766df422, 90px 0 #766df422;
+        background: #000;
+      }
+      33% {
+        box-shadow: 30px 0 #000, 60px 0 #766df422, 90px 0 #766df422;
+        background: #000;
+      }
+      66% {
+        box-shadow: 30px 0 #000, 60px 0 #000, 90px 0 #766df422;
+        background: #000;
+      }
+    }
+  `;
 
   return (
     <>
       <div>PointToPoint</div>
-      <div className='d-flex'>
-        <div className='mx-1'>
-          <animated.div style={props1}>
-            <div
-              style={{
-                width: props.width,
-                height: props.height,
-                borderRadius: 100,
-                background: '#000000',
-              }}
-            ></div>
-          </animated.div>
-        </div>
-        <div className='mx-1'>
-          <animated.div style={props2}>
-            <div
-              style={{
-                width: props.width,
-                height: props.height,
-                borderRadius: 100,
-                background: '#9E9898',
-              }}
-            ></div>
-          </animated.div>
-        </div>
-        <div className='mx-1'>
-          <animated.div style={props3}>
-            <div
-              style={{
-                width: props.width,
-                height: props.height,
-                borderRadius: 100,
-                background: '#9E9898',
-              }}
-            ></div>
-          </animated.div>
-        </div>
-        <div className='mx-1'>
-          <animated.div style={props4}>
-            <div
-              style={{
-                width: props.width,
-                height: props.height,
-                borderRadius: 100,
-                background: '#9E9898',
-              }}
-            ></div>
-          </animated.div>
-        </div>
-      </div>
+      <CustomLoaderNormal />
     </>
   );
 }
